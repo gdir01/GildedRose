@@ -1,10 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
 
 namespace GildedRose.Console
 {
     class Program
     {
         IList<Item> Items;
+
+
+        // List for output
+        List<string> output = new List<string>();
+
         static void Main(string[] args)
         {
             System.Console.WriteLine("OMGHAI!");
@@ -14,8 +23,8 @@ namespace GildedRose.Console
                               Items = new List<Item>
                                           {
                                               new Item {Name = "+5 Dexterity Vest", SellIn = 10, Quality = 20},
-                                              new Item {Name = "Aged Brie", SellIn = 2, Quality = 0},
-                                              new Item {Name = "Elixir of the Mongoose", SellIn = 5, Quality = 7},
+                                              new Item {Name = "Aged Brie", SellIn = 2, Quality = 25},
+                                              new Item {Name = "Elixir of the Mongoose", SellIn = 5, Quality = 6},
                                               new Item {Name = "Sulfuras, Hand of Ragnaros", SellIn = 0, Quality = 80},
                                               new Item
                                                   {
@@ -23,18 +32,55 @@ namespace GildedRose.Console
                                                       SellIn = 15,
                                                       Quality = 20
                                                   },
-                                              new Item {Name = "Conjured Mana Cake", SellIn = 3, Quality = 6}
+                                              new Item {Name = "Conjured Mana Cake", SellIn = 3, Quality = 16}
                                           }
 
                           };
 
-            app.UpdateQuality();
+            app.WriteOutput(app.Items);
+            for (int i = 0 ;i<30;i++)
+            {
+                UpdateStrategy.UpdateQuality(app.Items);
+                app.WriteOutput(app.Items);
+            }
+            //display output:
+            app.ShowOutput();
 
             System.Console.ReadKey();
 
         }
 
-        public void UpdateQuality()
+
+        // Writes current Items to output list
+        void WriteOutput(IList<Item> items)
+        {
+            int i = 0;
+            foreach (Item item in items)
+            {
+                i++;
+                string sLine = item.Name + ", " + item.SellIn + ", " + item.Quality;
+                if (output.Count<i) 
+                {
+                    output.Add(sLine);
+                }
+                else
+                {
+                    output[i-1] = output[i-1] + Environment.NewLine + sLine;
+                }
+            }   
+        }
+
+
+        // writes output list to console
+        void ShowOutput()
+        {
+            foreach (string s in output)
+            {
+                System.Console.WriteLine(s);
+            }
+        }
+
+    public void UpdateQualityOld()
         {
             for (var i = 0; i < Items.Count; i++)
             {
